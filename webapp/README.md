@@ -1,4 +1,4 @@
 imMens
 ======
 
-real-time visual query of big data
+real-time visual querying of big data
