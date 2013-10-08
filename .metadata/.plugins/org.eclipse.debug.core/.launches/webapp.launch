@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="RunJettyRunWebApp">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/webapp"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="RunJettyRunWebAppClassPathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="runjettyrun.Bootstrap"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="webapp"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms512m -Xmx2048m"/>
+<stringAttribute key="run_jetty_run.CONTEXT_ATTR" value="/webapp"/>
+<booleanAttribute key="run_jetty_run.ENABLE_JNDI_ATTR" value="false"/>
+<booleanAttribute key="run_jetty_run.ENABLE_NEED_CLIENT_AUTH_ATTR" value="false"/>
+<booleanAttribute key="run_jetty_run.ENABLE_PARENT_LOADER_PRIORITY_ATTR" value="true"/>
+<booleanAttribute key="run_jetty_run.ENABLE_SCANNER_ATTR" value="false"/>
+<booleanAttribute key="run_jetty_run.ENABLE_SSL_ATTR" value="false"/>
+<booleanAttribute key="run_jetty_run.IGNORE_SCAN_CLASS_WHEN_DEBUG_MODE" value="true"/>
+<stringAttribute key="run_jetty_run.JETTY_XML_PATH" value=""/>
+<stringAttribute key="run_jetty_run.KEYSTORE_ATTR" value="/Users/leoli/.keystore"/>
+<stringAttribute key="run_jetty_run.KEY_PWD_ATTR" value="changeit"/>
+<stringAttribute key="run_jetty_run.PORT_ATTR" value="8080"/>
+<stringAttribute key="run_jetty_run.PWD_ATTR" value="changeit"/>
+<stringAttribute key="run_jetty_run.SCANINTERVALSECONDS_ATTR" value="5"/>
+<stringAttribute key="run_jetty_run.SELECTED_JETTY_VERSION_ATTR" value="Jetty 6.1.26"/>
+<booleanAttribute key="run_jetty_run.SHOW_ADVANCE_ATTR" value="false"/>
+<stringAttribute key="run_jetty_run.SSL_PORT_ATTR" value="8443"/>
+<stringAttribute key="run_jetty_run.WEBAPPDIR_ATTR" value="WebContent"/>
+</launchConfiguration>

@@ -26,7 +26,7 @@ public class DataSetManager {
 	//value example: 0-8x1-8x4-0/0-27648-27903-8x1-32000-32255-8x4-0-23-0.png
 	private Map<String, List<String>> vTileId2dTileURL = new Hashtable<String, List<String>>();
 	private Map<String, JSONObject> tileMetaLookup = new Hashtable<String, JSONObject>();
-	private static final String tileBaseURL = "/imMens/ImmensServlet?pngTile=";
+	private static final String tileBaseURL = "/webapp/ImmensServlet?pngTile=";
 	private final static int maxCachedTiles = 500;
 
 	private static final String fileSeparator = "^";
