@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>imMens</title>
+<link rel="stylesheet" href="./imMens.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="./lib/jquery/css/ui-lightness/jquery-ui-1.10.1.custom.min.css" />
+<link rel="stylesheet" href="./lib/leaflet-0.5.1/leaflet.css" type="text/css" media="screen" />
+<script src="./lib/underscore-min.js"></script>
+<script src="./lib/backbone-min.js"></script>
+<script src="./lib/jquery/js/jquery-1.9.1.js"></script>
+<script src="./lib/jquery/js/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="./lib/leaflet-0.5.1/leaflet-src.js"></script>
+<script src="./lib/d3.v3.min.js"></script>
+<script src="./lib/dataUtil.js"></script>
+<script src="./lib/spec/dimInfo.js"></script>
+<script src="./lib/spec/MultiDimInfo.js"></script>
+<script src="./lib/spec/imMensEvent.js"></script>
+<script src="./lib/gridLayout.js"></script>
+<script src="./lib/spec/visualTile.js"></script>
+<script src="./lib/spec/visSpec.js"></script>
+<script src="./lib/networker.js"></script>
+<script src="./lib/m2mHash.js"></script>
+<script src="./lib/dataManager.js"></script>
+<script src="./lib/actionManager.js"></script>
+<script src="./lib/shaders.js"></script>
+<script src="./lib/JSProcessor.js"></script>
+<script src="./lib/WebGLProcessor.js"></script>
+<script src="./lib/WebGLRenderer.js"></script>
+<script src="./lib/workSheet.js"></script>
+<script src="./lib/visManager.js"></script>
+<script type="text/javascript">
+		var delay;
+		var participant;
+		var dataSets = { Brightkite: 0, FAA: 1 };
+		var currentDataSet; //= dataSets.FAA;
+		var logging = false;
+		var logger = new Networker();
+
+		function notifyServer(){
+			if (logging){
+				logger.httpPost(
+					"subject=" + participant + "&time=" + Date.now() + "&dataset=" + currentDataSet + "&type=imMensEvt&delay=" + delay + "&action=page%20load&spec=undefined&value=undefined"
+				);
+			}
+		};
+
+		document.addEventListener('mousemove', function (e) {
+			if (logging && visManager && visManager.get("activeWkSheet")){
+				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
+					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=move&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
+			}
+		}, false);
+		document.addEventListener('mouseup', function (e) {
+			if (logging && visManager && visManager.get("activeWkSheet")){
+				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
+					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=up&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
+			}
+		}, false);
+		document.addEventListener('mousedown', function (e) {
+			if (logging && visManager && visManager.get("activeWkSheet")){
+				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
+					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=down&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
+			}
+		}, false);
+</script>
+</head>
+<body onload="notifyServer()">
+
+	<div id="webgl" style="display:none; width: 400px;">
+		<img src="resources/webgl.png" style="width: 400px; margin-bottom:10px;"/>
+	</div>
+
+	<div id="warning" style="display:none;  width: 650px;"> 
+		<INPUT type="image" src="resources/warning.png"  style="width: 650px; height: 376px;" name="button1" onClick="startDemo()">
+	</div>
+
+	<div id="studySetup" style="display:none;  width: 650px;">
+		DataSet: <select id="dset">
+		 <option value="0">Brightkite</option>
+		 <option value="1">FAA</option>
+		</select><br><br>
+		Delay: <select id="dlay">
+		 <option value="0">0ms</option>
+		 <option value="3000">300ms</option>
+		 <option value="500">500ms</option>
+		 <option value="700">700ms</option>
+		 <option value="3000">3000ms</option>
+		</select><br><br>
+		Participant ID: <form><input type="text" name="name" id="pid" value="demo"></form><br><br><br>
+		<button type="button" onclick="setStudyParam()">Start</button>
+	</div>
+	
+	<script type="text/javascript">
+		
+		//check if webgl is supported
+		var tempGL = document.createElement("canvas").getContext("webgl", { depth: false });
+		// var sharedResourcesExtension = tempGL.getExtension("WEBGL_shared_resources");
+		// console.log(sharedResourcesExtension);
+		if (!tempGL) {
+			d3.select("#webgl").style("display","block");
+		} else {
+			d3.select("#studySetup").style("display","block");
+		}
+
+		function setStudyParam(){
+			delay = parseInt(d3.select("#dlay").property("value"));
+			currentDataSet = parseInt(d3.select("#dset").property("value"));
+			participant = d3.select("#pid").property("value");
+			logging = (d3.select("#pid").property("value") != "demo");
+			startDemo();
+		}
+
+		var visManager = new VisManager;
+		var dataManager = new DataManager;
+		var actionManager = new ActionManager;
+		
+		var imMensEvents = {
+			metaDataReceived: "metadataReceived",
+			tilesReceived : "tilesReceived"
+		};
+
+		//var mainVisSpec;
+		var animating = false;
+
+		
+		function startDemo(){
+			d3.select("#studySetup").style("display","none");
+			console.log(delay, currentDataSet, participant, logging);
+			visManager.addWorkSheet();
+			dataManager.fetchMetadata();
+		}
+		
+		window.requestAnimFrame = (function(){
+		  return  window.requestAnimationFrame       || 
+				  window.webkitRequestAnimationFrame || 
+				  window.mozRequestAnimationFrame    || 
+				  window.oRequestAnimationFrame      || 
+				  window.msRequestAnimationFrame     || 
+				  function( callback ){
+					window.setTimeout(callback, 1000 / 60);
+				  };
+		})();
+	</script>
+</body>
+</html>

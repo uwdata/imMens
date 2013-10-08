@@ -1,0 +1,246 @@
+@CHARSET "UTF-8";
+*:not(#pid) {
+	font-family: helvetica;
+    font-size: 11px;
+    -webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	user-drag: none;
+	-webkit-user-drag: none;
+	-moz-user-drag: none;
+	-khtml-user-drag: none;
+}
+
+#status {
+	width: 300px;
+	vertical-align: middle;
+	text-align: center;
+	margin-top: 250px;
+	margin-left: auto;
+	margin-right: auto;
+	z-index: 17;
+	color: #333333;
+	/*position:absolute; top:50%; height:240px; margin-top:-120px;*/
+}
+
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+     -moz-transition-duration: 0s;
+      -ms-transition-duration: 0s;
+       -o-transition-duration: 0s;
+          transition-duration: 0s;
+}
+
+.canvas{
+	z-index: 16;
+	pointer-events: none;
+}
+
+#hint{
+	margin-top: 660px;
+	text-align: center ;
+	margin-left: auto ;
+	margin-right: auto ;
+	width: 300px;
+	padding: 10px;
+	border: 1px solid #ddd;
+	background: #FFF2E5;
+}
+
+.sp-zoom-in-enabled{
+	z-index: 17;
+	background-image: url(resources/zoom-in.png);
+	margin-bottom: 5px;
+	width: 27px;
+	height: 27px;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	background-color: rgba(255, 255, 255, 0.75);
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+}
+.sp-zoom-out-enabled {
+	z-index: 17;
+	background-image: url(resources/zoom-out.png);
+	width: 27px;
+	height: 27px;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	background-color: rgba(255, 255, 255, 0.75);
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+}
+.sp-zoom-in-disabled{
+	z-index: 17;
+	background-image: url(resources/zoom-in.png);
+	margin-bottom: 5px;
+	width: 27px;
+	height: 27px;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	background-color: rgba(0, 0, 0, 0.25);
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+}
+.sp-zoom-out-disabled {
+	z-index: 17;
+	background-image: url(resources/zoom-out.png);
+	width: 27px;
+	height: 27px;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	background-color: rgba(0, 0, 0, 0.25);
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+}
+.sp-zoom-disabled {
+	z-index: 17;
+	width: 27px;
+	height: 27px;
+	background-color: rgba(255, 255, 255, 0.85);
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+}
+.sp-zoom-in-enabled:hover {
+	background-color: #fff;
+	cursor: pointer; cursor: hand;
+}
+.sp-zoom-out-enabled:hover {
+	background-color: #fff;
+	cursor: pointer; cursor: hand;
+}
+
+
+.mask{
+	z-index: 17;
+	pointer-events: none;
+}
+
+.map {
+	z-index: 15;
+}
+
+.specDiv {
+	visibility:hidden;
+	background:green;
+	margin: 5px;
+}
+
+#container {
+	visibility:hidden;
+	background: yellow;
+	border: 1px solid red;
+}
+
+#schema {
+	height: 600px;
+	width: 180px;
+	color: #FAFAFA;
+	overflow: auto;
+	border: 0px solid #555555;
+	position:fixed;
+	left: 10px;
+	top:10px;
+	border-radius: 4px;
+}
+
+#schema div {
+	font-size: 11px;
+}
+
+#addDimension {
+ 	cursor: none;
+ 	width: 97px;
+ 	height: 137px;
+ 	background: url("img/addDim.png") no-repeat left top;
+ 	position: absolute;
+ 	display: none;
+ 	top: 0;
+ 	left: 0;
+ 	z-index: 10000;
+}
+
+.schemaColumn {
+	height: auto;
+	width: auto;
+	font-size: 14px;
+	margin: 5px;
+	padding: 6px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	cursor:default;
+}
+
+.schemaColumn:hover {
+	background: #777777;
+}
+
+
+#draggingColumn {
+	height: auto;
+	width: 160px;
+	font-size: 12px;
+	margin: 5px;
+	padding: 6px;
+	background: #666666;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	color: #eeeeee;
+	cursor:default;
+}
+
+.placeholder {
+	pointer-events: all;
+}
+
+.placeholder:hover {
+	stroke: #eee;
+}
+ 
+
+
+#loading, #webgl, #warning, #studySetup {
+  width: 300px ;
+  margin-top: 200px;
+  text-align: center ;
+  margin-left: auto ;
+  margin-right: auto ;
+  font-size: 15px; 
+}
+
+.label {
+	font-size: 12px; 
+	font-weight:bold; 
+	color: black;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+	stroke: lightgray;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: sans-serif;
+    font-size: 10px;
+    color: lightgray;
+}
