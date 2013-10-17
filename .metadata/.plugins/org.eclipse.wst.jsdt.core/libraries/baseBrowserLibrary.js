@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009 IBM Corporation and others.
+ * Copyright (c) 2008, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -496,10 +496,10 @@ Document.prototype.getElementById=function(elementId){return new HTMLElement();}
  * @memberOf Node
  * @since Standard ECMA-262 3rd. Edition
  * @since Level 2 Document Object Model Core Definition.
- * @see Object    
+ * @see EventTarget    
  */
 function Node(){};
-Node.prototype=new Object(); 
+Node.prototype=new EventTarget(); 
 /**
  * Constant Node.ELEMENT_NODE=1
  * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
