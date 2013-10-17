@@ -1,6 +1,0 @@
-INDEX VERSION 1.122+/Users/leoli/Dropbox/imMens/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
-1147979034.index
-2257343501.index
-3515681534.index
-3117844384.index
-1303965209.index
