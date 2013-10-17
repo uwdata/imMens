@@ -4,6 +4,7 @@
 bin/**
 tmp/**
 tmp/**/*
+RemoteSystemsTempFiles/*
 *.tmp
 *.bak
 *.swp
@@ -12,6 +13,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+
 
 # External tool builders
 .externalToolBuilders/
