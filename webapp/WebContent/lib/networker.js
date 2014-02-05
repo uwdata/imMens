@@ -71,37 +71,6 @@ var Networker = Backbone.Model.extend({
 				
 				visManager.generateVisSpecs();
 				actionManager.generateControls();
-				
-				// var tiles = "";
-				// if (currentDataSet == dataSets.Brightkite){
-				// 	tiles = "0-256-511-4x1-512-767-4x2-0-11-0 _\
-				// 				0-256-511-4x1-512-767-4x3-0-30-0 _\
-				// 				0-256-511-4x1-512-767-4x4-0-23-0 _\
-				// 				0-256-511-4x1-768-1023-4x2-0-11-0 _\
-				// 				0-256-511-4x1-768-1023-4x3-0-30-0 _\
-				// 				0-256-511-4x1-768-1023-4x4-0-23-0 _\
-				// 				0-512-767-4x1-512-767-4x2-0-11-0 _\
-				// 				0-512-767-4x1-512-767-4x3-0-30-0 _\
-				// 				0-512-767-4x1-512-767-4x4-0-23-0 _\
-				// 				0-512-767-4x1-768-1023-4x2-0-11-0 _\
-				// 				0-512-767-4x1-768-1023-4x3-0-30-0 _\
-				// 				0-512-767-4x1-768-1023-4x4-0-23-0 _\
-				// 		2-0-11-0x3-0-30-0x4-0-23-0			";
-				// } else if (currentDataSet == dataSets.FAA){
-				// 	tiles = "0-0-173-0x1-0-173-0x2-0-27-0 _\
-				// 			0-0-173-0x1-0-173-0x3-0-19-0 _\
-				// 			0-0-173-0x1-0-173-0x4-0-11-0 _\
-				// 			0-0-173-0x2-0-27-0x3-0-19-0 _\
-				// 			0-0-173-0x2-0-27-0x4-0-11-0 _\
-				// 			0-0-173-0x3-0-19-0x4-0-11-0 _\
-				// 			1-0-173-0x2-0-27-0x3-0-19-0 _\
-				// 			1-0-173-0x2-0-27-0x4-0-11-0 _\
-				// 			1-0-173-0x3-0-19-0x4-0-11-0 _\
-				// 			2-0-27-0x3-0-19-0x4-0-11-0 ";
-				// }
-				
-				//dataManager.fetchTiles(tiles.split("_"));
-				//visManager.displayConstructionUI();
 			}
 		};
 	},
@@ -158,14 +127,6 @@ var Networker = Backbone.Model.extend({
   		    var currentTiles = visManager.get("activeWkSheet").get("allRequiredTiles");
   		    if (currentTiles.indexOf(pngTile.forVTile) > 0)
 				visManager.updateWorkSheets({recompute:true});
-			if (logging){
-				logger.httpPost(
-					"subject=" + participant + "&time=" + Date.now() + "&dataset=" + currentDataSet + "&type=imMensEvt&delay=" + delay + "&action=tile%20cached&spec=undefined&value=" + pngTile.id
-				);
-			}
-			// else {
-			// 	console.log("no need update");
-			// }
   		};
 	},
 	

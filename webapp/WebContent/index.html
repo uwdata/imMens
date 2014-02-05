@@ -31,107 +31,29 @@
 <script src="./lib/workSheet.js"></script>
 <script src="./lib/visManager.js"></script>
 <script type="text/javascript">
-		var delay;
-		var participant;
+		
 		var dataSets = { Brightkite: 0, FAA: 1 };
 		var currentDataSet; //= dataSets.FAA;
-		var logging = false;
-		var logger = new Networker();
 		var gtimer_id = undefined;
 
-		function notifyServer(){
-			if (logging){
-				logger.httpPost(
-					"subject=" + participant + "&time=" + Date.now() + "&dataset=" + currentDataSet + "&type=imMensEvt&delay=" + delay + "&action=page%20load&spec=undefined&value=undefined"
-				);
-			}
-		};
-		
-		function notifyServerProcessedEvts(line){
-			var tokens = line.split(",");
-		    var evtType = tokens[2];
-		    if (evtType == "clear" || evtType == "repaintBg" || evtType == "repaintFg" || evtType == "adjustView" || evtType == "tile cached") { // always handle event
-				/* setTimeout(function() {
-					logger.httpPost("subject="+ participant+ "&dataset=" + currentDataSet + "&delay=" + delay + "&processed=1&line="+line);
-				}, delay); */
-				logger.httpPost("subject="+ participant+ "&dataset=" + currentDataSet + "&delay=" + delay + "&processed=1&line="+line);
-			} else { //if (imEvt.getType() == ImMensEvent.evtTypes.adjustView) { //do not adjust if delay added
-				if (gtimer_id) {
-					clearTimeout(gtimer_id);
-					gtimer_id = undefined;
-				}
-				
-				gtimer_id = setTimeout(function() {
-					gtimer_id = undefined;
-					logger.httpPost("subject="+ participant+ "&dataset=" + currentDataSet + "&delay=" + delay + "&processed=1&line="+line);
-				}, delay);
-			} 
-			
-		}
-
-		/* document.addEventListener('mousemove', function (e) {
-			if (logging && visManager && visManager.get("activeWkSheet")){
-				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
-					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=move&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
-			}
-		}, false);
-		document.addEventListener('mouseup', function (e) {
-			if (logging && visManager && visManager.get("activeWkSheet")){
-				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
-					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=up&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
-			}
-		}, false);
-		document.addEventListener('mousedown', function (e) {
-			if (logging && visManager && visManager.get("activeWkSheet")){
-				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
-					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=down&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
-			}
-		}, false); */
 </script>
 </head>
-<body onload="notifyServer()">
+<body>
 
 	<div id="webgl" style="display:none; width: 400px;">
 		<img src="resources/webgl.png" style="width: 400px; margin-bottom:10px;"/>
 	</div>
 
 	<div id="warning" style="display:none;  width: 650px;"> 
-		<INPUT type="image" src="resources/warning.png"  style="width: 650px; height: 376px;" name="button1" onClick="startDemo()">
+		<INPUT type="image" src="resources/warning.png"  style="width: 650px; height: 376px;" name="button1" onClick="chooseData()">
 	</div>
 
 	<div id="studySetup" style="display:none;  width: 650px;">
-		DataSet: <select id="dset">
+		Choose DataSet: <select id="dset">
 		 <option value="0">Brightkite</option>
 		 <option value="1">FAA</option>
 		</select><br><br>
-		Delay: <select id="dlay">
-		 <option value="0">0ms</option>
-		 <option value="3000">300ms</option>
-		 <option value="500">500ms</option>
-		 <option value="700">700ms</option>
-		 <option value="3000">3000ms</option>
-		</select><br><br>
-		Participant ID: <!--form><input type="text" name="name" id="pid" value="demo"></form-->
-		<select id="pid">
-		 <option value="p2">p2</option>
-		 <option value="p3">p3</option>
-		 <option value="p4">p4</option>
-		 <option value="p5">p5</option>
-		 <option value="p6">p6</option>
-		 <option value="p7">p7</option>
-		 <option value="p8">p8</option>
-		 <option value="p9">p9</option>
-		 <option value="p10">p10</option>
-		 <option value="p11">p11</option>
-		 <option value="p12">p12</option>
-		 <option value="p13">p13</option>
-		 <option value="p14">p14</option>
-		 <option value="p15">p15</option>
-		 <option value="p16">p16</option>
-		 <option value="p17">p17</option>
-		</select>
-		<br><br><br>
-		<button type="button" onclick="setStudyParam()">Start</button>
+		<button onclick=startDemo()>Start</button>
 	</div>
 	
 	<script type="text/javascript">
@@ -143,15 +65,7 @@
 		if (!tempGL) {
 			d3.select("#webgl").style("display","block");
 		} else {
-			d3.select("#studySetup").style("display","block");
-		}
-
-		function setStudyParam(){
-			delay = parseInt(d3.select("#dlay").property("value"));
-			currentDataSet = parseInt(d3.select("#dset").property("value"));
-			participant = d3.select("#pid").property("value");
-			//logging = (d3.select("#pid").property("value") != "demo");
-			startDemo();
+			d3.select("#warning").style("display","block");
 		}
 
 		var visManager = new VisManager;
@@ -164,16 +78,18 @@
 			logReceived: "logReceived",
 		};
 
-		//var mainVisSpec;
 		var animating = false;
 
+		function chooseData(){
+			d3.select("#warning").style("display", "none");
+			d3.select("#studySetup").style("display","block");
+		}
 		
 		function startDemo(){
+			currentDataSet = document.getElementById("dset").value;
 			d3.select("#studySetup").style("display","none");
-			console.log(delay, currentDataSet, participant, logging);
 			visManager.addWorkSheet();
 			dataManager.fetchMetadata();
-			//dataManager.fetchUserLog();
 		}
 		
 		window.requestAnimFrame = (function(){

@@ -270,12 +270,6 @@ var DataManager = Backbone.Model.extend({
 		networker.httpGet("meta=1&dataset="+currentDataSet, imMensEvents.metaDataReceived);
 	},
 	
-	fetchUserLog : function(){
-		VisManager.updateStatus(true, "Retrieving Log ...");
-		var networker = new Networker();
-		networker.httpGet("dataset="+currentDataSet+"&subject="+participant+"&delay="+delay, imMensEvents.logReceived);
-	},
-	
 	defaults : function() {
 		return {
 			cacheById: {},
