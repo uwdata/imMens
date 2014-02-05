@@ -19,7 +19,7 @@ var WorkSheet = Backbone.Model.extend({
 					.attr("style", "display:block; width: " + visSize.wd + "px; height: " + visSize.ht + "px; position: absolute; left: " + parseInt(this.get("x") + visPos.x) + "px; top: " + parseInt(this.get("y") + spec.get("yFromTop")) + "px; background-color:black;")
 					.attr("pointer-events", "none");
 			
-			var minZm = 2, maxZm = 9;
+			var minZm = 2, maxZm = 7;
 			
 			spec.set("bgmap", new L.Map( divID, {scrollWheelZoom: false, inertia: false, boxZoom: false, maxZoom: maxZm, minZoom: minZm, zoomControl: false} ) );
 			new L.Control.Zoom({ position: 'topright' }).addTo(spec.get("bgmap"));
