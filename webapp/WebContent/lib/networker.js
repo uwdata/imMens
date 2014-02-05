@@ -20,8 +20,10 @@ var Networker = Backbone.Model.extend({
 		var request = new XMLHttpRequest(); 
 		if (evt == imMensEvents.tilesReceived)
 			request.onreadystatechange = this.processTiles(request);
-		else
+		else if (evt == imMensEvents.metaDataReceived)
 			request.onreadystatechange = this.processMetadata(request);
+		else
+			request.onreadystatechange = this.processLog(request);
 		request.open("GET", Networker.servletURI + params, true);
 		request.send(null);
 	},
@@ -41,6 +43,18 @@ var Networker = Backbone.Model.extend({
 		// 	}
 		// }
 		http.send(params);
+	},
+	
+	processLog : function(request){
+		return function () {
+			if (request.readyState != 4 || request.status != 200)
+				return;
+			
+			if (request.responseText != "Not found") {
+				actionManager.set("log", request.responseText);
+				console.log("log received");
+			}
+		};
 	},
 	
 	processMetadata : function(request){

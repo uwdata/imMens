@@ -505,6 +505,31 @@ var ActionManager = Backbone.Model.extend({
 //		});
 	},
 	
+	replayLog : function(){
+		var log = this.get("log");
+		var cmds = log.split("\n"), cmd, timeLapse, lastTimeStamp;
+		var evts = [];
+		var fireEvt = function(idx){
+			if (idx < evts.length - 1){
+				setTimeout(function() {
+					notifyServerProcessedEvts(evts[idx].line);
+					fireEvt(idx+1);
+				}, evts[idx].timeLapse);
+			} else
+				console.log(participant + " " + delay + " done");
+		};
+		for (var i = 0; i < cmds.length; i++){
+			cmd = cmds[i].split(",");
+			timeLapse = i == 0 ? 0 : parseInt(cmd[1]) - lastTimeStamp;
+			if (timeLapse > 300000)
+				timeLapse = 3000;
+			//console.log(cmd, timeLapse);
+			evts.push({"timeLapse" : timeLapse, "line" : cmds[i]});
+			lastTimeStamp = parseInt(cmd[1]);
+		}
+		fireEvt(0);
+	},
+	
 	generateControls : function(){
 		var ID = this.get("divID");
 		if (d3.select("#"+ID).empty()){
@@ -533,7 +558,9 @@ var ActionManager = Backbone.Model.extend({
 		d3.select("#"+ID).append("input").property("checked", false).attr("type", "checkbox").on("click", visManager.toggleLogScale);
 		d3.select("#"+ID).append("span").text("apply log scale (base E) to the histograms and bar charts")
 							.attr("style", "margin-right: 40px;" );
-
+		
+		d3.select("#"+ID).append("input").attr("type", "button").attr("value", "replay log").on("click", this.replayLog);
+		
 		// d3.select("#"+ID).append("span").text("number of bytes per value on tile = " + parseFloat(4/DataManager.numPerPix))
 		// 	.attr("style", " margin-left:20px; margin-right: 5px;" );
 		
@@ -573,6 +600,7 @@ var ActionManager = Backbone.Model.extend({
 		_.bindAll(this, 'endDrag');
 		_.bindAll(this, 'selectArea');
 		_.bindAll(this, 'pan');
+		_.bindAll(this, 'replayLog');
 	}
 }, {
 	dragModes: {pan: 0, resize: 1, select: 2, none: 3}

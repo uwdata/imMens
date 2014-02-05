@@ -37,6 +37,7 @@
 		var currentDataSet; //= dataSets.FAA;
 		var logging = false;
 		var logger = new Networker();
+		var gtimer_id = undefined;
 
 		function notifyServer(){
 			if (logging){
@@ -45,8 +46,30 @@
 				);
 			}
 		};
+		
+		function notifyServerProcessedEvts(line){
+			var tokens = line.split(",");
+		    var evtType = tokens[2];
+		    if (evtType == "clear" || evtType == "repaintBg" || evtType == "repaintFg" || evtType == "adjustView" || evtType == "tile cached") { // always handle event
+				/* setTimeout(function() {
+					logger.httpPost("subject="+ participant+ "&dataset=" + currentDataSet + "&delay=" + delay + "&processed=1&line="+line);
+				}, delay); */
+				logger.httpPost("subject="+ participant+ "&dataset=" + currentDataSet + "&delay=" + delay + "&processed=1&line="+line);
+			} else { //if (imEvt.getType() == ImMensEvent.evtTypes.adjustView) { //do not adjust if delay added
+				if (gtimer_id) {
+					clearTimeout(gtimer_id);
+					gtimer_id = undefined;
+				}
+				
+				gtimer_id = setTimeout(function() {
+					gtimer_id = undefined;
+					logger.httpPost("subject="+ participant+ "&dataset=" + currentDataSet + "&delay=" + delay + "&processed=1&line="+line);
+				}, delay);
+			} 
+			
+		}
 
-		document.addEventListener('mousemove', function (e) {
+		/* document.addEventListener('mousemove', function (e) {
 			if (logging && visManager && visManager.get("activeWkSheet")){
 				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
 					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=move&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
@@ -63,7 +86,7 @@
 				logger.httpPost("subject=" + participant + "&time=" + Date.now() + 
 					"&dataset=" + currentDataSet + "&type=mouseEvt&delay=" + delay + "&event=down&x="+e.clientX+"&y="+e.clientY+"&vis="+visManager.get("activeWkSheet").toString());
 			}
-		}, false);
+		}, false); */
 </script>
 </head>
 <body onload="notifyServer()">
@@ -88,7 +111,26 @@
 		 <option value="700">700ms</option>
 		 <option value="3000">3000ms</option>
 		</select><br><br>
-		Participant ID: <form><input type="text" name="name" id="pid" value="demo"></form><br><br><br>
+		Participant ID: <!--form><input type="text" name="name" id="pid" value="demo"></form-->
+		<select id="pid">
+		 <option value="p2">p2</option>
+		 <option value="p3">p3</option>
+		 <option value="p4">p4</option>
+		 <option value="p5">p5</option>
+		 <option value="p6">p6</option>
+		 <option value="p7">p7</option>
+		 <option value="p8">p8</option>
+		 <option value="p9">p9</option>
+		 <option value="p10">p10</option>
+		 <option value="p11">p11</option>
+		 <option value="p12">p12</option>
+		 <option value="p13">p13</option>
+		 <option value="p14">p14</option>
+		 <option value="p15">p15</option>
+		 <option value="p16">p16</option>
+		 <option value="p17">p17</option>
+		</select>
+		<br><br><br>
 		<button type="button" onclick="setStudyParam()">Start</button>
 	</div>
 	
@@ -108,7 +150,7 @@
 			delay = parseInt(d3.select("#dlay").property("value"));
 			currentDataSet = parseInt(d3.select("#dset").property("value"));
 			participant = d3.select("#pid").property("value");
-			logging = (d3.select("#pid").property("value") != "demo");
+			//logging = (d3.select("#pid").property("value") != "demo");
 			startDemo();
 		}
 
@@ -118,7 +160,8 @@
 		
 		var imMensEvents = {
 			metaDataReceived: "metadataReceived",
-			tilesReceived : "tilesReceived"
+			tilesReceived : "tilesReceived",
+			logReceived: "logReceived",
 		};
 
 		//var mainVisSpec;
@@ -130,6 +173,7 @@
 			console.log(delay, currentDataSet, participant, logging);
 			visManager.addWorkSheet();
 			dataManager.fetchMetadata();
+			//dataManager.fetchUserLog();
 		}
 		
 		window.requestAnimFrame = (function(){
