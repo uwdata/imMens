@@ -27,9 +27,7 @@ public class ImmensServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private Map<String, DataSetManager> datasets = new Hashtable<String, DataSetManager>();
-	private Map<String, BufferedWriter> writers = new Hashtable<String, BufferedWriter>();
 	private String userHome = System.getProperty("user.home");
-			//"/Users/zcliu/Dropbox/bigdata/logs";
 	
 	public ImmensServlet() {
         super();
@@ -37,21 +35,12 @@ public class ImmensServlet extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
     	super.init(config);
-    	String os = System.getProperty("os.name").toLowerCase();
     	
-    	String tileBaseLocalURL = ""; 
-    	
-    	if (os.indexOf("win") >= 0){
-    		tileBaseLocalURL = "C:\\Program Files\\jetty\\webapps\\tiles-png\\";
-    	} else if (os.indexOf("mac") >= 0){
-    		tileBaseLocalURL = userHome + File.separator + "Dropbox/github/tiles/";
-    	} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0){
-    		tileBaseLocalURL = "/u/zcliu/Documents/tiles-png/";
-    	}
+    	String tileBaseLocalURL = userHome + File.separator + "<tile folder>"; 
     	
     	DataSetManager brightkite = new DataSetManager("0", tileBaseLocalURL, "brightkite");
     	brightkite.init();
-    	DataSetManager faa = new DataSetManager("1", tileBaseLocalURL, "FAA_full");
+    	DataSetManager faa = new DataSetManager("1", tileBaseLocalURL, "faa");
     	faa.init();
     	datasets.put("0", brightkite);
     	datasets.put("1", faa);
