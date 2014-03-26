@@ -36,11 +36,11 @@ public class ImmensServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
     	super.init(config);
     	
-    	String tileBaseLocalURL = userHome + File.separator + "<tile folder>"; 
+    	String tileBaseLocalURL = "/Users/leoli/Dropbox/github/tiles"; //userHome + File.separator + "<tile folder>"; 
     	
     	DataSetManager brightkite = new DataSetManager("0", tileBaseLocalURL, "brightkite");
     	brightkite.init();
-    	DataSetManager faa = new DataSetManager("1", tileBaseLocalURL, "faa");
+    	DataSetManager faa = new DataSetManager("1", tileBaseLocalURL, "FAA_full");
     	faa.init();
     	datasets.put("0", brightkite);
     	datasets.put("1", faa);

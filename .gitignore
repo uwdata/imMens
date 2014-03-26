@@ -5,7 +5,6 @@ Thumbs.db
 ehthumbs.db
 
 *.pydevproject
-.project
 .metadata/*
 bin/**
 tmp/**
@@ -16,7 +15,6 @@ RemoteSystemsTempFiles/*
 *.swp
 *~.nib
 local.properties
-.classpath
 .settings/
 .loadpath
 
