@@ -14,20 +14,30 @@ var WorkSheet = Backbone.Model.extend({
 			var visPos = spec.getVisPosition();
 			var visSize = spec.getVisSize();
 			
-			if (d3.select("#"+divID).empty())
+			if (d3.select("#"+divID).empty()){
 				d3.select("body").append("div").attr("id", divID).attr("class", "map")
-					.attr("style", "display:block; width: " + visSize.wd + "px; height: " + visSize.ht + "px; position: absolute; left: " + parseInt(this.get("x") + visPos.x) + "px; top: " + parseInt(this.get("y") + spec.get("yFromTop")) + "px; background-color:black;")
-					.attr("pointer-events", "none");
+				.attr("style", "display:block; width: " + visSize.wd + "px; height: " + visSize.ht + "px; position: absolute; left: " + parseInt(this.get("x") + visPos.x) + "px; top: " + parseInt(this.get("y") + spec.get("yFromTop")) + "px; background-color:black;")
+				.attr("pointer-events", "none");
+				d3.select("#geoTileMask").append("rect")
+					.attr("x", visPos.x).attr("y", spec.get("yFromTop"))
+					.attr("width", visSize.wd).attr("height", visSize.ht)
+					.style("fill", "black").attr("opacity", "0.65");
+				//.attr("style", "display:block; width: " + visSize.wd + "px; height: " + visSize.ht + "px; position: absolute; left: " + parseInt(this.get("x") + visPos.x) + "px; top: " + parseInt(this.get("y") + spec.get("yFromTop")) + "px; background-color:black;opacity:0.65;")
+				//.attr("pointer-events", "none");
+			}
+				
 			
 			var minZm = 2, maxZm = 7;
 			
 			spec.set("bgmap", new L.Map( divID, {scrollWheelZoom: false, inertia: false, boxZoom: false, maxZoom: maxZm, minZoom: minZm, zoomControl: false} ) );
 			new L.Control.Zoom({ position: 'topright' }).addTo(spec.get("bgmap"));
 			
-			var tileLayer = new L.TileLayer(WorkSheet.CloudmadeUrl, { 
+			var tileLayer = new L.TileLayer(WorkSheet.esriUrl, { 
 					tileSize:spec.get("bgmapTileSize"),
 					minZoom: minZm, 
-					maxZoom: maxZm, styleId: 101194 //72337
+					maxZoom: maxZm, 
+					attribution: WorkSheet.esriAttrib, //WorkSheet.osmAttrib,
+					//styleId: 101194 //72337
 			});
 			
 			spec.get("bgmap").setView( spec.get("center"), spec.get("zmLevels")[0] ).addLayer(tileLayer);	
@@ -176,6 +186,12 @@ var WorkSheet = Backbone.Model.extend({
 			.attr("style", "position: absolute;left:"+ this.get("x") +"px; top:" + this.get("y") + "px;border: 0px solid #ddd;")
 
 		this.createCanvas(true);
+		
+		//layer for geo
+		d3.select("body").append("svg").attr("id", "geoTileMask").attr("class", "canvas")
+		.attr("width",this.get("width")).attr("height",this.get("height"))
+		.attr("style", "pointer-events:none;position: absolute;left:"+ this.get("x") +"px; top:" + this.get("y") + "px;border: 0px solid #ddd;")
+
 		this.createCanvas(false);
 		var plots = this;
 		var svgLayer = document.getElementById(this.get("svgLayer"));
@@ -221,6 +237,7 @@ var WorkSheet = Backbone.Model.extend({
 		svgLayer.onclick = function(evt){
 			actionManager.selectPoint(plots, plots.getCoordInPlots(evt), evt) ;
 		};
+		
 		
 		//mask layer
 		d3.select("body").append("svg").attr("id", this.get("maskLayer")).attr("class", "mask")
@@ -719,6 +736,10 @@ var WorkSheet = Backbone.Model.extend({
 	//MAX_LATITUDE: 85.0840591556,
 	//R_MINOR: 6356752.3142,
 	//R_MAJOR: 6378137,
-	CloudmadeUrl : 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/101194/256/{z}/{x}/{y}.png',
+	CloudmadeUrl : 'http://{s}.tile.cloudmade.com/a890b24c87ce4bd3a9365f3750d15777/101194/256/{z}/{x}/{y}.png',
+	osmUrl: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+	osmAttrib: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
 	CloudmadeAttribution : 'Map data &copy; OpenStreetMap contributors, Imagery &copy; CloudMade',
+	esriUrl: 'http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+	esriAttrib: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTE'
 });

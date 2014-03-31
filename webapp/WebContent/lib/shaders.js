@@ -36,7 +36,7 @@ var Shaders = Backbone.Model.extend({
 					discard;											\
 				}										\
 				highp float hiG = 1.0, loG = 0.0;													\
-				highp float hiB = 0.7, loB = 0.0;												\
+				highp float hiB = 0.7, loB = 0.0;					\
 				if (sum <= u_loV)	return vec4(1.0, hiG, hiB, 1.0);									\
 				else if (sum > u_hiV)	return vec4(1.0, loG, loB, 1.0);										\
 				highp float ratio =  (sum - u_loV)/(u_hiV - u_loV);			\
