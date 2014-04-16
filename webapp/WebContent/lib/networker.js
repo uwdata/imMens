@@ -194,5 +194,5 @@ var Networker = Backbone.Model.extend({
 
 }, {
 	loading : {},
-	servletURI : "/webapp/ImmensServlet?",
+	servletURI : "/imMens/ImmensServlet?",
 });
