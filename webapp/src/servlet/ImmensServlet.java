@@ -40,7 +40,7 @@ public class ImmensServlet extends HttpServlet {
     	
     	DataSetManager brightkite = new DataSetManager("0", tileBaseLocalURL, "brightkite", config.getServletName());
     	brightkite.init();
-    	DataSetManager faa = new DataSetManager("1", tileBaseLocalURL, "FAA_full", config.getServletName());
+    	DataSetManager faa = new DataSetManager("1", tileBaseLocalURL, "faa", config.getServletName());
     	faa.init();
     	datasets.put("0", brightkite);
     	datasets.put("1", faa);
