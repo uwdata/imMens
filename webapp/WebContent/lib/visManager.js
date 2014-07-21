@@ -245,6 +245,35 @@ var VisManager = Backbone.Model.extend({
 		this.set("lastEvt", imEvt);
 		
 		visManager.get("activeWkSheet").processEvent(imEvt);
+		
+		if (delay === 0) {
+			visManager.get("activeWkSheet").processEvent(imEvt);
+		} else if (imEvt.getType() == ImMensEvent.evtTypes.clear || imEvt.getType() == ImMensEvent.evtTypes.repaintBg || 
+			imEvt.getType() == ImMensEvent.evtTypes.repaintFg) { // always handle event
+			setTimeout(function() {
+	    		visManager.get("activeWkSheet").processEvent(imEvt);
+	   		}, delay);
+		} else if (imEvt.getType() == ImMensEvent.evtTypes.adjustView){ // update scatter plot with delay
+			setTimeout(function() {
+	    		visManager.get("activeWkSheet").get("bgProcessor").run();
+	    		visManager.get("activeWkSheet").get("bgRenderer").run();
+	   		}, delay);
+		} else { //if (imEvt.getType() == ImMensEvent.evtTypes.adjustView) { //do not adjust if delay added
+			var timer_id = visManager.get("timerId");
+			if (timer_id) {
+				clearTimeout(timer_id);
+				visManager.set("timerId", undefined);
+	  		}
+	  		if (imEvt.getType() == ImMensEvent.evtTypes.pan && currentDataSet === 0)
+	    		visManager.get("activeWkSheet").get("fgRenderer").run([imEvt.getSource()]);
+	    	// else if (imEvt.getType() == ImMensEvent.evtTypes.pan && currentDataSet === 1)
+	    	// 	visManager.get("activeWkSheet").get("bgRenderer").run([imEvt.getSource()]);;
+	  		timer_id = setTimeout(function() {
+	    		visManager.set("timerId", undefined);
+	    		visManager.get("activeWkSheet").processEvent(imEvt);
+	   		}, delay);
+	  		visManager.set("timerId", timer_id);
+		}
 	},
 	
 	updateWorkSheets: function(args){

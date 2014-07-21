@@ -18,25 +18,28 @@ var WorkSheet = Backbone.Model.extend({
 				d3.select("body").append("div").attr("id", divID).attr("class", "map")
 				.attr("style", "display:block; width: " + visSize.wd + "px; height: " + visSize.ht + "px; position: absolute; left: " + parseInt(this.get("x") + visPos.x) + "px; top: " + parseInt(this.get("y") + spec.get("yFromTop")) + "px; background-color:black;")
 				.attr("pointer-events", "none");
-				d3.select("#geoTileMask").append("rect")
-					.attr("x", visPos.x).attr("y", spec.get("yFromTop"))
-					.attr("width", visSize.wd).attr("height", visSize.ht)
-					.style("fill", "black").attr("opacity", "0.65");
+//				d3.select("#geoTileMask").append("rect")
+//					.attr("x", visPos.x).attr("y", spec.get("yFromTop"))
+//					.attr("width", visSize.wd).attr("height", visSize.ht)
+//					.style("fill", "black").attr("opacity", "0.65");
 				//.attr("style", "display:block; width: " + visSize.wd + "px; height: " + visSize.ht + "px; position: absolute; left: " + parseInt(this.get("x") + visPos.x) + "px; top: " + parseInt(this.get("y") + spec.get("yFromTop")) + "px; background-color:black;opacity:0.65;")
 				//.attr("pointer-events", "none");
 			}
-				
 			
 			var minZm = 2, maxZm = 7;
 			
 			spec.set("bgmap", new L.Map( divID, {scrollWheelZoom: false, inertia: false, boxZoom: false, maxZoom: maxZm, minZoom: minZm, zoomControl: false} ) );
 			new L.Control.Zoom({ position: 'topright' }).addTo(spec.get("bgmap"));
 			
-			var tileLayer = new L.TileLayer(WorkSheet.esriUrl, { 
+			var tileLayer = new L.TileLayer(
+					//WorkSheet.esriUrl, { 
+					'https://{s}.tiles.mapbox.com/v3/mapbox.world-black/{z}/{x}/{y}.png', {
+					id: 'examples.map-i86knfo3',//'examples.map-i86knfo3',
 					tileSize:spec.get("bgmapTileSize"),
 					minZoom: minZm, 
 					maxZoom: maxZm, 
-					attribution: WorkSheet.esriAttrib, //WorkSheet.osmAttrib,
+					attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+						//WorkSheet.esriAttrib, //WorkSheet.osmAttrib,
 					//styleId: 101194 //72337
 			});
 			
