@@ -28,13 +28,14 @@ var WebGLProcessor = Backbone.Model.extend({
 		}
 		
 		this.rollup(gl);
+		this.unbindTexture(gl);
 	},
 	
 	processVisualTile : function(gl, visualTile, vSpec){
 		
 		if ( visualTile.getNumDataTile() == 0 )
 			return;
-
+		
 		var numDim = visualTile.getDataTileDimensionality();
 		
 		var prog = numDim < 4? this.get("program3D") : this.get("program4D") ;
@@ -53,10 +54,11 @@ var WebGLProcessor = Backbone.Model.extend({
 		var binTexWd = fboImg.width;
     	var binTexHt = fboImg.height;
     	gl.viewport(0, 0, fboImg.width, fboImg.height);
-		
+    	
     	this.drawPart(prog,  gl, x0 * vSpec.get("fboWidthPerVTile") * 2/binTexWd,  binTexYPos[binIdx]*2/binTexHt, 
     			(x0 + 1) * vSpec.get("fboWidthPerVTile") * 2/binTexWd, (binTexYPos[binIdx]+h)*2/binTexHt, 
 				binTexWd, binTexHt );
+    	
 	},
 	
 	rollup : function(gl){
@@ -70,6 +72,7 @@ var WebGLProcessor = Backbone.Model.extend({
 				this.processVisualTile (gl, spec.get("visualTiles")[vTileId], spec );
 			}
 		}
+		
 		
 		if (!this.isBg())	return;
 		
@@ -260,6 +263,11 @@ var WebGLProcessor = Backbone.Model.extend({
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, rollupTexture, 0);
 	},
 	
+	unbindTexture: function(gl){
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.get("dummyTex"), 0);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	},
+	
 	getBinTexIdx : function(cols){
 		if (cols.length == 1)
 			return cols[0];
@@ -295,11 +303,16 @@ var WebGLProcessor = Backbone.Model.extend({
 		
 		var binTexWd = DataUtil.logCeil(this.get("binnedPlots").get("fboWidth"),2);
 		var binTexHt = DataUtil.logCeil(count, 2);
+		var dummyTex = DataUtil.createTexture(gl, 16, 16);
+		dummyTex.width = 16;
+		dummyTex.height = 16;
 		var tex = DataUtil.createTexture(gl, binTexWd, binTexHt);
 		tex.width = binTexWd;
 		tex.height = binTexHt;
+
 		this.set("binYLoc", binTexYPos);
 		this.set("resultImg", tex);
+		this.set("dummyTex", dummyTex);
 		return tex;
 	},
 	

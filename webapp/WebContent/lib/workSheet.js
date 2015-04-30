@@ -226,7 +226,7 @@ var WorkSheet = Backbone.Model.extend({
 		svgLayer.addEventListener('mouseout', function(evt) {
 			if (plots.get("activeSpec"))	return;
 			plots.set("brushFilter", undefined);
-			plots.updateFg();
+			plots.updateFg(true);
 		}, false);
 		
 		svgLayer.addEventListener('mousedown', function(evt) {
@@ -351,7 +351,7 @@ var WorkSheet = Backbone.Model.extend({
 			//this.initDataTiles(event.getSource());
 			this.set("activeSpec", event.getSource());
 		}
-		//console.log(event.getType(), event.getSource());
+		
 		switch (event.getType()) {
 		case ImMensEvent.evtTypes.clear:
 			var canvasId = this.get("maskLayer");
@@ -363,7 +363,7 @@ var WorkSheet = Backbone.Model.extend({
 		case ImMensEvent.evtTypes.brush:
 			this.set("brushFilter", event.getValue());
 			this.initDataTiles(false);
-			this.updateFg();
+			this.updateFg(true);
 			break;
 		case ImMensEvent.evtTypes.rangeSelect:
 			if (event.getSource().get("type")!=VisSpec.GEO){
